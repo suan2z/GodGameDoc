@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>갓겜 (GodGame) 게임 기획서</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:           #00212b;
+  --sidebar-bg:   #002d3b;
+  --surface:      #003347;
+  --surface2:     #003d54;
+  --border:       #0a5068;
+  --accent:       #2dd4bf;
+  --accent2:      #34d399;
+  --accent3:      #fbbf24;
+  --accent4:      #f87171;
+  --text:         #daf0f4;
+  --text-muted:   #5fa8b8;
+  --sidebar-width: 260px;
+  --code-bg:      #002d3b;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  font-size: 15px;
+}
+
+/* ─── SIDEBAR ─── */
+#sidebar {
+  position: fixed;
+  top: 0; left: 0;
+  width: var(--sidebar-width);
+  height: 100vh;
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+}
+
+#sidebar::-webkit-scrollbar { width: 4px; }
+#sidebar::-webkit-scrollbar-track { background: transparent; }
+#sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+.logo {
+  padding: 28px 20px 20px;
+  border-bottom: 1px solid var(--border);
+}
+.logo h1 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: -0.3px;
+  line-height: 1.3;
+}
+.logo p {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 5px;
+}
+
+.nav-section {
+  padding: 16px 12px;
+  flex: 1;
+}
+
+.nav-section a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 6px;
+  transition: all 0.18s;
+  margin-bottom: 2px;
+  border-left: 2px solid transparent;
+}
+.nav-section a:hover {
+  color: var(--text);
+  background: var(--surface);
+}
+.nav-section a.active {
+  color: var(--accent);
+  background: rgba(45, 212, 191, 0.08);
+  border-left-color: var(--accent);
+}
+
+/* ─── MAIN ─── */
+#main {
+  margin-left: var(--sidebar-width);
+  padding: 0 40px 80px;
+  max-width: calc(var(--sidebar-width) + 860px);
+}
+
+/* ─── PAGE HEADER ─── */
+.page-header {
+  padding: 56px 0 40px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 48px;
+}
+.page-header h1 {
+  font-size: 38px;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 60%, var(--accent3) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -1px;
+  line-height: 1.2;
+  margin-bottom: 10px;
+}
+.page-subtitle {
+  font-size: 15px;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+  max-width: 620px;
+  line-height: 1.6;
+}
+.meta-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+.pill {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  padding: 4px 12px;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 500;
+}
+.pill.accent { background: rgba(45,212,191,0.12); border-color: rgba(45,212,191,0.3); color: var(--accent); }
+.pill.green  { background: rgba(52,211,153,0.12); border-color: rgba(52,211,153,0.3); color: var(--accent2); }
+.pill.yellow { background: rgba(251,191,36,0.12); border-color: rgba(251,191,36,0.3); color: var(--accent3); }
+.pill.red    { background: rgba(248,113,113,0.12); border-color: rgba(248,113,113,0.3); color: var(--accent4); }
+
+/* ─── CHAPTER ─── */
+.chapter {
+  margin-bottom: 60px;
+  scroll-margin-top: 24px;
+}
+.chapter-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+.chapter-header h2 {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+.chapter-num {
+  width: 38px; height: 38px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px; font-weight: 800;
+  flex-shrink: 0;
+}
+.ch-blue   { background: rgba(59,130,246,0.18); color: #60a5fa; }
+.ch-green  { background: rgba(52,211,153,0.18); color: #34d399; }
+.ch-yellow { background: rgba(251,191,36,0.18); color: #fbbf24; }
+.ch-red    { background: rgba(248,113,113,0.18); color: #f87171; }
+.ch-purple { background: rgba(167,139,250,0.18); color: #a78bfa; }
+.ch-cyan   { background: rgba(45,212,191,0.18); color: #2dd4bf; }
+.ch-orange { background: rgba(251,146,60,0.18); color: #fb923c; }
+.ch-pink   { background: rgba(244,114,182,0.18); color: #f472b6; }
+
+/* ─── SECTION CARD ─── */
+.section-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px 28px;
+  margin-bottom: 16px;
+}
+.section-card h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+.section-card h4 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent3);
+  margin: 16px 0 8px;
+}
+.section-card p { color: var(--text); margin-bottom: 10px; }
+.section-card ul, .section-card ol {
+  padding-left: 20px;
+  margin-bottom: 10px;
+}
+.section-card li { margin-bottom: 5px; color: var(--text); }
+.section-card strong { color: var(--accent3); font-weight: 600; }
+.section-card em { color: var(--text-muted); font-style: italic; }
+
+/* ─── TABLES ─── */
+.table-wrap {
+  overflow-x: auto;
+  margin: 14px 0;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+thead tr { background: var(--surface2); }
+thead th {
+  padding: 10px 14px;
+  text-align: left;
+  font-weight: 600;
+  color: var(--accent);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+tbody tr { border-bottom: 1px solid rgba(10,80,104,0.4); transition: background 0.15s; }
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: var(--surface2); }
+tbody td {
+  padding: 9px 14px;
+  color: var(--text);
+  vertical-align: top;
+}
+tbody td strong { color: var(--accent3); }
+
+/* ─── CALLOUTS ─── */
+.callout {
+  display: flex;
+  gap: 14px;
+  padding: 16px 18px;
+  border-radius: 10px;
+  margin: 14px 0;
+  border-left: 3px solid;
+}
+.callout.info    { background: rgba(45,212,191,0.07); border-color: var(--accent); }
+.callout.warn    { background: rgba(251,191,36,0.07); border-color: var(--accent3); }
+.callout.success { background: rgba(52,211,153,0.07); border-color: var(--accent2); }
+.callout.purple  { background: rgba(167,139,250,0.07); border-color: #a78bfa; }
+.callout-icon { font-size: 20px; flex-shrink: 0; line-height: 1.4; }
+.callout-body { flex: 1; }
+.callout-title { font-weight: 700; font-size: 14px; margin-bottom: 4px; }
+.callout.info    .callout-title { color: var(--accent); }
+.callout.warn    .callout-title { color: var(--accent3); }
+.callout.success .callout-title { color: var(--accent2); }
+.callout.purple  .callout-title { color: #a78bfa; }
+.callout-text { font-size: 13.5px; color: var(--text-muted); line-height: 1.6; }
+
+/* ─── CODE BLOCKS ─── */
+pre {
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px 18px;
+  overflow-x: auto;
+  margin: 12px 0;
+}
+pre code {
+  font-family: 'Menlo', 'Consolas', monospace;
+  font-size: 12.5px;
+  color: var(--accent2);
+  line-height: 1.6;
+}
+code {
+  background: var(--surface2);
+  color: var(--accent);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 12.5px;
+  font-family: 'Menlo', 'Consolas', monospace;
+}
+pre code { background: none; padding: 0; }
+
+/* ─── CARD GRID ─── */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+  margin: 14px 0;
+}
+.feature-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+}
+.feature-card .icon { font-size: 24px; margin-bottom: 8px; }
+.feature-card .fc-title { font-weight: 700; font-size: 14px; color: var(--accent); margin-bottom: 4px; }
+.feature-card .fc-desc { font-size: 12.5px; color: var(--text-muted); line-height: 1.5; }
+
+/* ─── PITCH BOX ─── */
+.pitch-box {
+  background: linear-gradient(135deg, rgba(45,212,191,0.1), rgba(52,211,153,0.05));
+  border: 1px solid rgba(45,212,191,0.3);
+  border-radius: 12px;
+  padding: 20px 24px;
+  margin: 14px 0;
+  font-size: 15px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+/* ─── BADGES ─── */
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  margin-right: 4px;
+}
+.badge-gray   { background: rgba(148,163,184,0.15); color: #94a3b8; }
+.badge-blue   { background: rgba(96,165,250,0.15); color: #60a5fa; }
+.badge-purple { background: rgba(167,139,250,0.15); color: #a78bfa; }
+.badge-gold   { background: rgba(251,191,36,0.15); color: #fbbf24; }
+.badge-rainbow { background: linear-gradient(90deg,rgba(248,113,113,0.2),rgba(251,191,36,0.2),rgba(52,211,153,0.2)); color: #daf0f4; }
+
+/* ─── ROADMAP GRID ─── */
+.roadmap-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 12px;
+  margin: 14px 0;
+}
+.roadmap-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+}
+.roadmap-card .phase-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--accent);
+  margin-bottom: 6px;
+}
+.roadmap-card .phase-title { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+.roadmap-card .phase-period { font-size: 12px; color: var(--accent3); margin-bottom: 8px; }
+.roadmap-card .phase-desc { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+
+/* ─── REVENUE GRID ─── */
+.revenue-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin: 14px 0;
+}
+.revenue-item {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.revenue-pct {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--accent);
+  line-height: 1;
+  flex-shrink: 0;
+}
+.revenue-label { font-size: 13px; color: var(--text-muted); }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 900px) {
+  #sidebar { width: 220px; }
+  :root { --sidebar-width: 220px; }
+  #main { padding: 0 20px 60px; }
+}
+@media (max-width: 660px) {
+  #sidebar { display: none; }
+  #main { margin-left: 0; padding: 0 16px 60px; }
+  .page-header h1 { font-size: 28px; }
+  .revenue-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ─── SIDEBAR ─── -->
+<nav id="sidebar">
+  <div class="logo">
+    <h1>🎮 갓겜 GodGame</h1>
+    <p>게임 기획서 v1.0 · 2026-03-24</p>
+  </div>
+  <div class="nav-section">
+    <a href="#game-overview">📋 게임 개요</a>
+    <a href="#concept">💡 핵심 컨셉 및 방향성</a>
+    <a href="#game-system">⚙️ 게임 시스템</a>
+    <a href="#main-stage">🛡️ 메인 스테이지 룰</a>
+    <a href="#unit-system">⚔️ 유닛 시스템</a>
+    <a href="#enemy-system">👾 적 시스템</a>
+    <a href="#map">🗺️ 맵 &amp; 레이아웃</a>
+    <a href="#matching">🔗 매칭 시스템</a>
+    <a href="#growth">📈 성장 &amp; 메타 시스템</a>
+    <a href="#monetization">💰 수익 모델</a>
+    <a href="#uiux">🖥️ UI/UX 설계</a>
+    <a href="#tech">🔧 기술 스펙 요구사항</a>
+    <a href="#roadmap">🚀 출시 로드맵</a>
+  </div>
+</nav>
+
+<!-- ─── MAIN ─── -->
+<div id="main">
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <h1>갓겜 (GodGame)</h1>
+    <p class="page-subtitle">운빨로 뽑은 유닛으로 낯선 유저와 함께 몰려오는 적을 막는 2인 코옵 디펜스.<br>이기면 운빨, 지면 팀운 — 그래도 계속하게 되는 게임.</p>
+    <div class="meta-pills">
+      <span class="pill accent">캐주얼 전략 랜덤 디펜스</span>
+      <span class="pill green">iOS / Android</span>
+      <span class="pill yellow">2인 코옵</span>
+      <span class="pill">v1.0</span>
+      <span class="pill">2026-03-24</span>
+      <span class="pill">전체 이용가</span>
+      <span class="pill red">개발자 전달용</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════ -->
+  <!-- 1. 게임 개요 -->
+  <!-- ══════════════════════════════════ -->
+  <section class="chapter" id="game-overview">
+    <div class="chapter-header">
+      <div class="chapter-num ch-blue">📋</div>
+      <h2>게임 개요</h2>
+    </div>
+
+    <div class="section-card">
+      <h3>기본 정보</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>항목</th><th>내용</th></tr></thead>
+          <tbody>
+            <tr><td><strong>게임명</strong></td><td>갓겜 (GodGame)</td></tr>
+            <tr><td><strong>장르</strong></td><td>캐주얼 전략 랜덤 디펜스</td></tr>
+            <tr><td><strong>플랫폼</strong></td><td>iOS / Android</td></tr>
+            <tr><td><strong>플레이 인원</strong></td><td>2인 코옵 (온라인 매칭)</td></tr>
+            <tr><td><strong>타겟 유저</strong></td><td>15~35세, 가볍게 즐기는 캐주얼 게이머</td></tr>
+            <tr><td><strong>등급</strong></td><td>전체 이용가 (심의 예정)</td></tr>
+            <tr><td><strong>핵심 키워드</strong></td><td>랜덤, 코옵, 운빨, 디펜스, 짧은 세션</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <h3>엘리베이터 피치</h3>
+      <div class="pitch-box">
+        "운빨로 뽑은 유닛으로 낯선 유저와 함께 몰려오는 적을 막는 2인 코옵 디펜스.<br>
+        이기면 운빨, 지면 팀운 — 그래도 계속하게 되는 게임."
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════ -->
+  <!-- 2. 핵심 컨셉 -->
+  <!-- ══════════════════════════════════ -->
+  <section class="chapter" id="concept">
+    <div class="chapter-header">
+      <div class="chapter-num ch-green">💡</div>
+      <h2>핵심 컨셉 및 방향성</h2>
+    </div>
+
+    <div class="section-card">
+      <h3>디자인 필로소피</h3>
+      <div class="card-grid">
+        <div class="feature-card">
+          <div class="icon">🎲</div>
+          <div class="fc-title">운빨존만겜</div>
+          <div class="fc-desc">유닛 소환은 100% 랜덤. 전략은 주어진 패로 극복하는 것</div>
+        </div>
+        <div class="feature-card">
+          <div class="icon">🤝</div>
+          <div class="fc-title">코옵 케미스트리</div>
+          <div class="fc-desc">상대방이 뭘 뽑았는지 확인하고 서로 보완하는 재미</div>
+        </div>
+        <div class="feature-card">
+          <div class="icon">⚡</div>
+          <div class="fc-title">짧고 굵은 세션</div>
+          <div class="fc-desc">1판 10~20분 내외, 출퇴근 중에도 완주 가능</div>
+        </div>
+        <div class="feature-card">
+          <div class="icon">🚀</div>
+          <div class="fc-title">저진입장벽</div>
+          <div class="fc-desc">복잡한 조작 없이 배치 → 관전 → 결과 구조</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <h3>레퍼런스 게임</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>게임</th><th>참고 요소</th></tr></thead>
+          <tbody>
+            <tr><td>오토체스 / TFT</td><td>랜덤 유닛 시스템, 시너지 구조</td></tr>
+            <tr><td>클래시 로얄</td><td>모바일 PvP 배치 감각</td></tr>
+            <tr><td>랜덤 디펜스 (Warcraft)</td><td>핵심 장르 원형</td></tr>
+            <tr><td>Brawl Stars</td><td>캐주얼 코옵 매칭 UX</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════ -->
+  <!-- 3. 게임 시스템 -->
+  <!-- ══════════════════════════════════ -->
+  <section class="chapter" id="game-system">
+    <div class="chapter-header">
+      <div class="chapter-num ch-yellow">⚙️</div>
+      <h2>게임 시스템</h2>
+    </div>
+
+    <div class="section-card">
+      <h3>전체 게임 플로우</h3>
+      <pre><code>[로비] → [난이도 선택] → [매칭 대기] → [유닛 드래프트 Phase]
+  → [배치 Phase] → [웨이브 전투] → [반복 (다음 웨이브)]
+  → [50웨이브 클리어 or 실패] → [결과 화면] → [보상 지급] → [로비]</code></pre>
+    </div>
+
+    <div class="section-card">
+      <h3>게임 페이즈 상세</h3>
+      <h4>Phase 1 — 드래프트 (웨이브 시작 전 준비 시간)</h4>
+      <ul>
+        <li>각 웨이브 시작 전 <strong>15초</strong> 드래프트 타임 제공</li>
+        <li>플레이어는 <strong>골드</strong>를 소비해 유닛을 <strong>랜덤 소환</strong> (가챠 방식)</li>
+        <li>소환된 유닛은 즉시 배치 가능 / 판매 가능</li>
+        <li>웨이브 1~10: 기본 소환만 가능</li>
+        <li>웨이브 11~30: 고급 소환 해금</li>
+        <li>웨이브 31~50: 전설 소환 해금</li>
+      </ul>
+      <h4>Phase 2 — 배치</h4>
+      <ul>
+        <li>드래프트 이후 <strong>10초</strong> 배치 타임</li>
+        <li>자신의 배치 구역(맵 절반)에 유닛 자유 배치</li>
+        <li>상대 배치 영역은 반투명으로 실시간 확인 가능</li>
+      </ul>
+      <h4>Phase 3 — 전투 (자동 전투)</h4>
+      <ul>
+        <li>배치 완료 후 자동 전투 진행</li>
+        <li>플레이어는 전투 중 <strong>스킬 액티브</strong> 가능 (웨이브 당 1회)</li>
+        <li>웨이브 종료 시 골드 획득</li>
+      </ul>
+    </div>
+
+    <div class="section-card">
+      <h3>골드 시스템</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>획득 방법</th><th>골드량</th></tr></thead>
+          <tbody>
+            <tr><td>웨이브 클리어</td><td>10 + (웨이브 번호 × 2)</td></tr>
+            <tr><td>적 처치 보너스</td><td>적 1마리당 1골드</td></tr>
+            <tr><td>콤보 보너스 (연속 클리어)</td><td>5골드 추가</td></tr>
+            <tr><td>유닛 판매</td><td>구매가의 60% 반환</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-wrap" style="margin-top: 14px;">
+        <table>
+          <thead><tr><th>소환 종류</th><th>비용</th><th>등급 확률</th></tr></thead>
+          <tbody>
+            <tr><td>기본 소환</td><td>3골드</td><td>일반 70% / 희귀 25% / 영웅 5%</td></tr>
+            <tr><td>고급 소환</td><td>8골드</td><td>일반 20% / 희귀 50% / 영웅 25% / 전설 5%</td></tr>
+            <tr><td>전설 소환</td><td>20골드</td><td>영웅 40% / 전설 55% / 신화 5%</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════ -->
+  <!-- 4. 메인 스테이지 룰 -->
+  <!-- ══════════════════════════════════ -->
+  <section class="chapter" id="main-stage">
+    <div class="chapter-header">
+      <div class="chapter-num ch-red">🛡️</div>
+      <h2>메인 스테이지 룰 (코옵 디펜스)</h2>
+    </div>
+
+    <div class="section-card">
+      <h3>기본 구조</h3>
+      <ul>
+        <li><strong>인원:</strong> 2인 1팀 온라인 코옵</li>
+        <li><strong>목표:</strong> 50웨이브를 끝까지 막아내기</li>
+        <li><strong>실패 조건:</strong> 팀 공유 체력(라이프 포인트) 0 도달</li>
+      </ul>
+    </div>
+
+    <div class="section-card">
+      <h3>난이도 3종</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>난이도</th><th>이름</th><th>웨이브</th><th>적 특성</th><th>권장 레벨</th><th>보상</th></tr></thead>
+          <tbody>
+            <tr><td>쉬움</td><td>🌱 일반</td><td>50웨이브</td><td>기본 속도, 기본 HP</td><td>제한 없음</td><td>기본 보상</td></tr>
+            <tr><td>보통</td><td>🔥 지옥</td><td>50웨이브</td><td>+30% 속도, +50% HP</td><td>Lv.10+</td><td>1.5배 보상</td></tr>
+            <tr><td>어려움</td><td>💀 신의 시련</td><td>50웨이브</td><td>+70% 속도, 특수 적 등장, 보스 강화</td><td>Lv.25+</td><td>3배 보상</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout info" style="margin-top: 10px;">
+        <div class="callout-icon">ℹ️</div>
+        <div class="callout-body">
+          <div class="callout-title">매칭 규칙</div>
+          <div class="callout-text">같은 난이도를 선택한 유저끼리 자동 매칭</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <h3>라이프 포인트 (LP) 시스템</h3>
+      <ul>
+        <li>팀 공유 라이프: <strong>20 LP</strong></li>
+        <li>적 1마리 통과 시: <strong>-1 LP</strong> (일반) / <strong>-2 LP</strong> (정예) / <strong>-5 LP</strong> (보스)</li>
+        <li>LP 회복: 특정 웨이브 클리어 보너스 (웨이브 10, 25, 40)에서 <strong>+2 LP</strong> 지급</li>
+      </ul>
+    </div>
+
+    <div class="section-card">
+      <h3>웨이브 구조 (50웨이브)</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>구간</th><th>웨이브</th><th>특징</th></tr></thead>
+          <tbody>
+            <tr><td>초반</td><td>1~10</td><td>기본 적, 난이도 입문 구간</td></tr>
+            <tr><td>중반</td><td>11~25</td><td>정예 적 등장, 적 수 증가</td></tr>
+            <tr><td>후반</td><td>26~40</td><td>빠른 적 / 탱커 혼합, 전략 필요</td></tr>
+            <tr><td>위기</td><td>41~49</td><td>보스 미니언 + 정예 혼합</td></tr>
+            <tr><td>최종</td><td>50</td><td><strong>보스 웨이브</strong> — 대형 보스 1마리 + 호위대</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <h3>코옵 인터랙션</h3>
+      <ul>
+        <li><strong>유닛 공유 불가</strong> — 각자 독립 배치 구역</li>
+        <li><strong>시너지 연동 가능</strong> — 상대 유닛 등급 확인하여 보완 배치 전략</li>
+        <li><strong>이모티콘 소통</strong> — 텍스트 채팅 없이 빠른 이모티콘 6종으로 소통</li>
+        <li><strong>서포트 스킬</strong> — 일부 유닛이 상대방 구역에도 버프 제공</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════ -->
+  <!-- 5. 유닛 시스템 -->
+  <!-- ══════════════════════════════════ -->
+  <section class="chapter" id="unit-system">
+    <div class="chapter-header">
+      <div class="chapter-num ch-purple">⚔️</div>
+      <h2>유닛 시스템</h2>
+    </div>
+
+    <div class="section-card">
+      <h3>유닛 등급</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>등급</th><th>이름</th><th>색상</th><th>기본 스탯 배율</th><th>스킬 수</th></tr></thead>
+          <tbody>
+            <tr><td>1등급</td><td><span class="badge badge-gray">일반</span></td><td>회색</td><td>× 1.0</td><td>0</td></tr>
+            <tr><td>2등급</td><td><span class="badge badge-blue">희귀</span></td><td>파랑</td><td>× 1.8</td><td>1 (패시브)</td></tr>
+            <tr><td>3등급</td><td><span class="badge badge-purple">영웅</span></td><td>보라</td><td>× 3.5</td><td>1 (액티브)</td></tr>
+            <tr><td>4등급</td><td><span class="badge badge-gold">전설</span></td><td>금색</td><td>× 7.0</td><td>2</td></tr>
+            <tr><td>5등급</td><td><span class="badge badge-rainbow">신화</span></td><td>무지개</td><td>× 15.0</td><td>3</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <h3>유닛 타입</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>타입</th><th>역할</th><th>공격 방식</th><th>배치 위치</th></tr></thead>
+          <tbody>
+            <tr><td>⚔️ 전사</td><td>탱커</td><td>근접 단일</td><td>전선</td></tr>
+            <tr><td>🏹 궁수</td><td>원딜</td><td>원거리 단일</td><td>후방</td></tr>
+            <tr><td>🔮 마법사</td><td>광역딜</td><td>원거리 범위</td><td>중앙</td></tr>
+            <tr><td>💚 힐러</td><td>지원</td><td>아군 회복</td><td>후방</td></tr>
+            <tr><td>🗡️ 암살자</td><td>고딜</td><td>근접 단일 (빠름)</td><td>측면</td></tr>
+            <tr><td>💣 대포</td><td>공성</td><td>범위 느림</td><td>고정 포대</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <h3>유닛 합성 시스템</h3>
+      <div class="callout success">
+        <div class="callout-icon">✅</div>
+        <div class="callout-body">
+          <div class="callout-title">동일 유닛 3개 합성 → 다음 등급 1개 승급</div>
+          <div class="callout-text">일반 × 3 → 희귀 1개 → 영웅 1개 → 전설 1개 → 신화 1개<br>무료 플레이어도 합성으로 고등급 유닛에 도달 가능하도록 설계</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <h3>시너지 시스템</h3>
+      <p>같은 <strong>속성</strong>의 유닛 N개 배치 시 팀 전체 버프 적용</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>속성</th><th>2개 시너지</th><th>4개 시너지</th><th>6개 시너지</th></tr></thead>
+          <tbody>
+            <tr><td>🔥 불꽃</td><td>공격력 +10%</td><td>공격력 +25%</td><td>범위 공격 발동</td></tr>
+            <tr><td>❄️ 얼음</td><td>적 둔화 5%</td><td>적 둔화 15%</td><td>적 빙결 확률</td></tr>
+            <tr><td>⚡ 번개</td><td>크리티컬 +5%</td><td>크리티컬 +15%</td><td>연쇄 번개 발동</td></tr>
+            <tr><td>🌑 어둠</td><td>HP 흡수 3%</td><td>HP 흡수 10%</td><td>흡혈 광역화</td></tr>
+            <tr><td>✨ 빛</td><td>아군 회복 5</td><td>아군 회복 15</td><td>부활 1회</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════ -->
+  <!-- 6. 적 시스템 -->
+  <!-- ══════════════════════════════════ -->
+  <section class="chapter" id="enemy-system">
+    <div class="chapter-header">
+      <div class="chapter-num ch-cyan">👾</div>
+      <h2>적 시스템</h2>
+    </div>
+
+    <div class="section-card">
+      <h3>적 종류</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>분류</th><th>이름</th><th>특성</th><th>LP 피해</th></tr></thead>
+          <tbody>
+            <tr><td>기본</td><td>슬라임 / 고블린</td><td>기본 스탯</td><td>-1</td></tr>
+            <tr><td>빠름</td><td>늑대 / 스프린터</td><td>이동속도 2배</td><td>-1</td></tr>
+            <tr><td>탱커</td><td>거인 / 실드몹</td><td>HP 3배, 느림</td><td>-2</td></tr>
+            <tr><td>정예</td><td>엘리트 몬스터</td><td>스탯 2배 + 스킬 보유</td><td>-2</td></tr>
+            <tr><td>보스 미니언</td><td>보스 수행원</td><td>보스 웨이브 전 등장</td><td>-3</td></tr>
+            <tr><td>보스</td><td>대형 보스 (웨이브 50)</td><td>엄청난 HP + 패턴 3종</td><td>-5</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <h3>웨이브 당 적 수</h3>
+      <ul>
+        <li>웨이브 1: <strong>10마리</strong></li>
+        <li>웨이브 10: <strong>30마리</strong></li>
+        <li>웨이브 25: <strong>50마리</strong></li>
+        <li>웨이브 40: <strong>70마리</strong></li>
+        <li>웨이브 50: <strong>보스 1마리 + 수행원 30마리</strong></li>
+      </ul>
+    </div>
+
+    <div class="section-card">
+      <h3>보스 패턴 (웨이브 50)</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>패턴</th><th>발동 조건</th><th>효과</th></tr></thead>
+          <tbody>
+            <tr><td>패턴 1: 돌진</td><td>HP 100%</td><td>직선 돌진, 전선 유닛 넉백</td></tr>
+            <tr><td>패턴 2: 광역 공격</td><td>HP 60%</td><td>배치 구역 전체 데미지</td></tr>
+            <tr><td>패턴 3: 증원 소환</td><td>HP 30%</td><td>정예 몬스터 10마리 소환</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════ -->
+  <!-- 7. 맵 & 레이아웃 -->
+  <!-- ══════════════════════════════════ -->
+  <section class="chapter" id="map">
+    <div class="chapter-header">
+      <div class="chapter-num ch-orange">🗺️</div>
+      <h2>맵 &amp; 레이아웃</h2>
+    </div>
+
+    <div class="section-card">
+      <h3>맵 구조</h3>
+      <pre><code>[적 출현 지점]
+       ↓
++--------------------+
+|  경로 (Path)       |  ← 구불구불한 경로, 유닛은 경로 밖 배치
+|  플레이어 A 구역   |  ← 맵 좌측 절반
+|  플레이어 B 구역   |  ← 맵 우측 절반
++--------------------+
+       ↓
+[라이프 포인트 기지]</code></pre>
+    </div>
+
+    <div class="section-card">
+      <h3>맵 타일 규격</h3>
+      <ul>
+        <li>그리드 기반: <strong>8 × 12 타일</strong> (각 플레이어 절반)</li>
+        <li>배치 가능 타일: 경로 제외 나머지 (약 70%)</li>
+        <li>경로 타일: 배치 불가, 시각적으로 구분</li>
+      </ul>
+    </div>
+
+    <div class="section-card">
+      <h3>맵 테마 (스테이지별 변형)</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>테마</th><th>특징</th></tr></thead>
+          <tbody>
+            <tr><td>🌿 초원</td><td>기본 맵, 직선 경로</td></tr>
+            <tr><td>🏚️ 던전</td><td>구불구불한 경로, 시야 제한</td></tr>
+            <tr><td>❄️ 설원</td><td>유닛 이동속도 감소 디버프 구역 포함</td></tr>
+            <tr><td>🌋 화산</td><td>주기적 화염 타일 발동</td></tr>
+            <tr><td>🏛️ 신전</td><td>보스 강화 존 존재</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════ -->
+  <!-- 8. 매칭 시스템 -->
+  <!-- ══════════════════════════════════ -->
+  <section class="chapter" id="matching">
+    <div class="chapter-header">
+      <div class="chapter-num ch-pink">🔗</div>
+      <h2>매칭 시스템</h2>
+    </div>
+
+    <div class="section-card">
+      <h3>매칭 알고리즘</h3>
+      <ul>
+        <li><strong>같은 난이도 선택자끼리만 매칭</strong></li>
+        <li>매칭 우선순위: ① 같은 난이도 ② 비슷한 레벨 범위 (±10 레벨)</li>
+        <li>매칭 대기 30초 초과 시: 레벨 범위 ±20으로 확장</li>
+        <li>매칭 대기 60초 초과 시: AI 봇 매칭으로 대체 (봇 표시 없음, 퀄리티 동일하게 설계)</li>
+      </ul>
+    </div>
+
+    <div class="section-card">
+      <h3>매칭 화면 UX</h3>
+      <pre><code>[난이도 선택 버튼 3개]
+    ↓ 선택
+[매칭 대기 화면]
+  - 상대방 닉네임 + 레벨 표시
+  - 예상 대기 시간 카운트
+  - 매칭 취소 버튼
+    ↓ 매칭 성공
+[게임 시작 카운트다운 3초]</code></pre>
+    </div>
+
+    <div class="section-card">
+      <h3>탈주 패널티</h3>
+      <ul>
+        <li>웨이브 10 이전 탈주: 경험치 0, 골드 0, 탈주 기록 누적</li>
+        <li>3회 누적 탈주: <strong>10분 매칭 제한</strong></li>
+        <li>웨이브 10 이후 탈주: AI 자동 대체 (상대방 불이익 최소화)</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════ -->
+  <!-- 9. 성장 & 메타 시스템 -->
+  <!-- ══════════════════════════════════ -->
+  <section class="chapter" id="growth">
+    <div class="chapter-header">
+      <div class="chapter-num ch-blue">📈</div>
+      <h2>성장 &amp; 메타 시스템</h2>
+    </div>
+
+    <div class="section-card">
+      <h3>플레이어 레벨</h3>
+      <ul>
+        <li>경험치 획득: 스테이지 클리어, 일일 퀘스트, 업적</li>
+        <li>레벨 보상: 소환권, 골드, 코스튬 조각</li>
+      </ul>
+    </div>
+
+    <div class="section-card">
+      <h3>유닛 영구 강화 (컬렉션)</h3>
+      <ul>
+        <li>동일 유닛 다수 획득 시 <strong>컬렉션 포인트</strong> 누적</li>
+        <li>컬렉션 포인트로 해당 유닛 영구 스탯 강화 (최대 <strong>+30%</strong>)</li>
+        <li>이 강화는 게임 내 전투에서 항상 적용</li>
+      </ul>
+    </div>
+
+    <div class="section-card">
+      <h3>업적 &amp; 칭호</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>업적명</th><th>조건</th><th>보상</th></tr></thead>
+          <tbody>
+            <tr><td>첫 클리어</td><td>스테이지 최초 클리어</td><td>소환권 10장</td></tr>
+            <tr><td>50웨이브 완파</td><td>일반 난이도 클리어</td><td>타이틀 "디펜더"</td></tr>
+            <tr><td>지옥에서 살아남다</td><td>지옥 난이도 클리어</td><td>타이틀 "지옥전사"</td></tr>
+            <tr><td>신화를 소환하라</td><td>신화 등급 유닛 1회 획득</td><td>코스튬 조각</td></tr>
+            <tr><td>탈주 없는 50판</td><td>50판 탈주 없이 완주</td><td>전용 프레임</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <h3>시즌 패스 트랙</h3>
+      <ul>
+        <li>시즌 기간: <strong>3개월</strong></li>
+        <li>무료 트랙 / 유료 트랙 구분</li>
+        <li>시즌 포인트: 스테이지 클리어 + 일일 퀘스트 달성으로 획득</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════ -->
+  <!-- 10. 수익 모델 -->
+  <!-- ══════════════════════════════════ -->
+  <section class="chapter" id="monetization">
+    <div class="chapter-header">
+      <div class="chapter-num ch-green">💰</div>
+      <h2>수익 모델 (Monetization)</h2>
+    </div>
+
+    <div class="section-card">
+      <h3>수익 구조 개요</h3>
+      <div class="revenue-grid">
+        <div class="revenue-item">
+          <div class="revenue-pct">40%</div>
+          <div class="revenue-label">시즌 패스</div>
+        </div>
+        <div class="revenue-item">
+          <div class="revenue-pct">30%</div>
+          <div class="revenue-label">소환권 패키지</div>
+        </div>
+        <div class="revenue-item">
+          <div class="revenue-pct">20%</div>
+          <div class="revenue-label">광고 수익</div>
+        </div>
+        <div class="revenue-item">
+          <div class="revenue-pct">10%</div>
+          <div class="revenue-label">기타 (코스튬)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <h3>시즌 패스</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>상품</th><th>가격</th><th>내용</th></tr></thead>
+          <tbody>
+            <tr><td>프리 패스</td><td>무료</td><td>기본 보상 트랙 (소환권, 골드, 일반 코스튬)</td></tr>
+            <tr><td>갓겜 패스</td><td>₩8,900/시즌</td><td>전체 보상 트랙 + 시즌 전용 코스튬 + 소환권 2배</td></tr>
+            <tr><td>갓겜 패스+</td><td>₩15,900/시즌</td><td>패스 + 경험치 1.5배 + 전용 이모티콘 + 보너스 소환권 30장</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <h3>소환권 &amp; 재화 판매</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>상품</th><th>가격</th><th>내용</th></tr></thead>
+          <tbody>
+            <tr><td>소환권 10장</td><td>₩1,100</td><td>기본 소환 10회</td></tr>
+            <tr><td>소환권 50장 (보너스 5장)</td><td>₩4,900</td><td>기본 소환 55회</td></tr>
+            <tr><td>황금 소환권 10장</td><td>₩5,500</td><td>고급 소환 10회</td></tr>
+            <tr><td>스타터 패키지</td><td>₩3,300</td><td>황금 소환권 5장 + 영웅 유닛 1개 확정</td></tr>
+            <tr><td>월정액 패키지</td><td>₩4,400/월</td><td>매일 소환권 3장 + 골드 1000</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <h3>광고 (Ads)</h3>
+      <h4>보상형 광고 (Rewarded Ad)</h4>
+      <ul>
+        <li>전투 패배 후 부활 1회 (광고 시청)</li>
+        <li>소환 추가 1회 (광고 시청, 1일 3회 제한)</li>
+        <li>일일 골드 2배 (광고 시청, 1일 1회)</li>
+      </ul>
+      <div class="callout info" style="margin-top: 12px;">
+        <div class="callout-icon">ℹ️</div>
+        <div class="callout-body">
+          <div class="callout-title">광고 제거 상품</div>
+          <div class="callout-text">₩3,300 (영구) — 게임 내 배너/전면 광고 제거 (보상형은 선택 유지)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <h3>코스튬 &amp; 코스메틱</h3>
+      <ul>
+        <li>유닛 스킨, 배치 구역 테마, 이모티콘 팩</li>
+        <li>순수 코스메틱 — <strong>전투 스탯 영향 없음</strong></li>
+        <li>개별 판매 ₩1,100~₩5,500 / 번들 ₩8,900</li>
+      </ul>
+    </div>
+
+    <div class="section-card">
+      <h3>BM 원칙 (개발 지침)</h3>
+      <div class="callout warn">
+        <div class="callout-icon">⚠️</div>
+        <div class="callout-body">
+          <div class="callout-title">P2W 방지 원칙</div>
+          <div class="callout-text">
+            유료 결제로 전투 스탯이 직접 증가하는 구조 금지.<br>
+            소환권으로 강한 유닛 확보 가능하나, 합성으로 무료 플레이어도 도달 가능하게 설계.<br>
+            광고 보상은 편의 제공 수준으로 제한 (게임 불균형 야기 금지).
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════ -->
+  <!-- 11. UI/UX 설계 -->
+  <!-- ══════════════════════════════════ -->
+  <section class="chapter" id="uiux">
+    <div class="chapter-header">
+      <div class="chapter-num ch-yellow">🖥️</div>
+      <h2>UI/UX 설계</h2>
+    </div>
+
+    <div class="section-card">
+      <h3>화면 구조</h3>
+      <pre><code>메인 로비
+├── 스테이지 선택 (난이도 3종)
+├── 컬렉션 (유닛 도감)
+├── 상점 (소환 / 구매)
+├── 업적 &amp; 퀘스트
+├── 랭킹 (클리어 기록)
+└── 설정</code></pre>
+    </div>
+
+    <div class="section-card">
+      <h3>인게임 HUD 레이아웃</h3>
+      <pre><code>┌─────────────────────────────────────────┐
+│  [웨이브: 12/50]   [LP: ♥♥♥♥♥ 15/20]   │
+│  [상대방 정보: 닉네임 / 배치현황]         │
+├─────────────────────────────────────────┤
+│                                         │
+│        [게임 맵 (80% 화면)]              │
+│                                         │
+├─────────────────────────────────────────┤
+│  [골드: 24]  [유닛 목록: 배치된 유닛]    │
+│  [소환 버튼]  [스킬 버튼]  [판매 버튼]   │
+└─────────────────────────────────────────┘</code></pre>
+    </div>
+
+    <div class="section-card">
+      <h3>UX 핵심 원칙</h3>
+      <div class="card-grid">
+        <div class="feature-card">
+          <div class="icon">👆</div>
+          <div class="fc-title">단순 조작</div>
+          <div class="fc-desc">탭 &amp; 드래그만으로 모든 인터랙션 완성</div>
+        </div>
+        <div class="feature-card">
+          <div class="icon">⚡</div>
+          <div class="fc-title">빠른 피드백</div>
+          <div class="fc-desc">유닛 배치 즉시 시각/음향 피드백</div>
+        </div>
+        <div class="feature-card">
+          <div class="icon">🎯</div>
+          <div class="fc-title">정보 과부하 방지</div>
+          <div class="fc-desc">인게임 중 필수 정보만 노출</div>
+        </div>
+        <div class="feature-card">
+          <div class="icon">♿</div>
+          <div class="fc-title">접근성</div>
+          <div class="fc-desc">색약 모드 지원, 폰트 크기 조절</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <h3>주요 화면 상세</h3>
+      <h4>소환 화면</h4>
+      <ul>
+        <li>연출: 카드 뒤집기 애니메이션 (0.8초 이내)</li>
+        <li>등급별 연출 차별화: 신화 등급은 별도 풀스크린 연출</li>
+        <li>확률 공개 필수 (법적 요건)</li>
+      </ul>
+      <h4>결과 화면</h4>
+      <ul>
+        <li>클리어 시: 별점(★★★), 최고 웨이브 기록, 보상 아이템 표시</li>
+        <li>실패 시: 부활 광고 옵션 → 5초 후 자동 닫힘</li>
+        <li>공유 버튼: 결과 카드 SNS 공유 (바이럴 유도)</li>
+      </ul>
+      <h4>매칭 대기 화면</h4>
+      <ul>
+        <li>상대방 정보 표시 (닉네임, 레벨, 최근 클리어 기록)</li>
+        <li>미니 팁 표시 (로딩 중 게임 팁 슬라이드)</li>
+        <li>예상 대기 시간 실시간 표시</li>
+      </ul>
+    </div>
+
+    <div class="section-card">
+      <h3>이모티콘 시스템</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>이모티콘</th><th>아이콘</th><th>상황</th></tr></thead>
+          <tbody>
+            <tr><td>OK</td><td>👍</td><td>준비 완료</td></tr>
+            <tr><td>도움!</td><td>🆘</td><td>지원 요청</td></tr>
+            <tr><td>잘했어!</td><td>🎉</td><td>웨이브 클리어</td></tr>
+            <tr><td>조심해!</td><td>⚠️</td><td>위험 경고</td></tr>
+            <tr><td>ㅠㅠ</td><td>😭</td><td>실수 표현</td></tr>
+            <tr><td>GG</td><td>🏆</td><td>게임 종료 인사</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════ -->
+  <!-- 12. 기술 스펙 -->
+  <!-- ══════════════════════════════════ -->
+  <section class="chapter" id="tech">
+    <div class="chapter-header">
+      <div class="chapter-num ch-red">🔧</div>
+      <h2>기술 스펙 요구사항</h2>
+    </div>
+
+    <div class="section-card">
+      <h3>클라이언트</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>항목</th><th>내용</th></tr></thead>
+          <tbody>
+            <tr><td><strong>엔진</strong></td><td>Unity 2022 LTS</td></tr>
+            <tr><td><strong>언어</strong></td><td>C#</td></tr>
+            <tr><td><strong>렌더링</strong></td><td>URP (모바일 최적화)</td></tr>
+            <tr><td><strong>최소 사양 iOS</strong></td><td>iPhone SE 2세대 이상, iOS 14+</td></tr>
+            <tr><td><strong>최소 사양 Android</strong></td><td>Android 8.0+, RAM 3GB+</td></tr>
+            <tr><td><strong>타겟 FPS</strong></td><td>60fps (저사양 30fps 옵션)</td></tr>
+            <tr><td><strong>빌드 용량 목표</strong></td><td>200MB 이하 (초기 설치)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <h3>서버</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>항목</th><th>내용</th></tr></thead>
+          <tbody>
+            <tr><td><strong>매칭 서버</strong></td><td>실시간 매칭, WebSocket 기반</td></tr>
+            <tr><td><strong>게임 서버</strong></td><td>상태 동기화 (웨이브 진행, LP, 골드)</td></tr>
+            <tr><td><strong>DB</strong></td><td>유저 데이터, 컬렉션, 업적</td></tr>
+            <tr><td><strong>동기화 방식</strong></td><td>웨이브 시작/종료 시 동기화 포인트</td></tr>
+            <tr><td><strong>지연 허용</strong></td><td>200ms 이내 (배치 동기화)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <h3>네트워크 처리 주의사항</h3>
+      <ul>
+        <li>전투는 <strong>클라이언트 시뮬레이션</strong> → 서버는 결과만 검증</li>
+        <li>배치 정보는 드래프트 종료 시 <strong>양쪽 동시 전송</strong></li>
+        <li>패킷 위변조 방지: 서버 사이드 밸리데이션 필수</li>
+        <li>탈주/연결 끊김: 30초 내 재연결 허용, 초과 시 AI 대체</li>
+      </ul>
+    </div>
+
+    <div class="section-card">
+      <h3>보안</h3>
+      <ul>
+        <li>소환 결과: <strong>서버 사이드 랜덤</strong> (클라이언트 조작 불가)</li>
+        <li>골드 획득/소비: 서버 검증 필수</li>
+        <li>결제 검증: 영수증 서버 검증 (Google Play / App Store)</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════ -->
+  <!-- 13. 출시 로드맵 -->
+  <!-- ══════════════════════════════════ -->
+  <section class="chapter" id="roadmap">
+    <div class="chapter-header">
+      <div class="chapter-num ch-purple">🚀</div>
+      <h2>출시 로드맵</h2>
+    </div>
+
+    <div class="section-card">
+      <h3>개발 단계</h3>
+      <div class="roadmap-grid">
+        <div class="roadmap-card">
+          <div class="phase-label">Phase 1</div>
+          <div class="phase-title">Pre-Alpha</div>
+          <div class="phase-period">1~2개월</div>
+          <div class="phase-desc">핵심 디펜스 루프 구현 (1인 로컬 테스트)</div>
+        </div>
+        <div class="roadmap-card">
+          <div class="phase-label">Phase 2</div>
+          <div class="phase-title">Alpha</div>
+          <div class="phase-period">3~4개월</div>
+          <div class="phase-desc">코옵 매칭 구현, 유닛 30종, 웨이브 시스템 완성</div>
+        </div>
+        <div class="roadmap-card">
+          <div class="phase-label">Phase 3</div>
+          <div class="phase-title">Beta (CBT)</div>
+          <div class="phase-period">5~6개월</div>
+          <div class="phase-desc">외부 테스터 500명, 밸런싱, 수익 모델 적용</div>
+        </div>
+        <div class="roadmap-card">
+          <div class="phase-label">Phase 4</div>
+          <div class="phase-title">소프트 런치</div>
+          <div class="phase-period">7개월</div>
+          <div class="phase-desc">특정 지역 출시, 지표 수집</div>
+        </div>
+        <div class="roadmap-card">
+          <div class="phase-label">Phase 5</div>
+          <div class="phase-title">글로벌 출시</div>
+          <div class="phase-period">8~9개월</div>
+          <div class="phase-desc">전 플랫폼 글로벌 출시</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <h3>출시 후 업데이트 계획</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>업데이트</th><th>시기</th><th>내용</th></tr></thead>
+          <tbody>
+            <tr><td><strong>v1.1</strong></td><td>출시 1개월 후</td><td>신규 유닛 10종, 버그 픽스</td></tr>
+            <tr><td><strong>v1.2</strong></td><td>출시 2개월 후</td><td>신규 맵 테마 2종, 신규 보스</td></tr>
+            <tr><td><strong>v2.0</strong></td><td>출시 3개월 후</td><td>시즌 2 시작, 랭킹 리셋, 신규 시너지</td></tr>
+            <tr><td><strong>v2.5</strong></td><td>출시 5개월 후</td><td>4인 코옵 모드 (신규 모드)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 부록 A -->
+    <div class="section-card">
+      <h3>부록 A. 유닛 초기 풀 (32종)</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>#</th><th>유닛명</th><th>등급</th><th>타입</th><th>속성</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>마을 궁수</td><td><span class="badge badge-gray">일반</span></td><td>궁수</td><td>없음</td></tr>
+            <tr><td>2</td><td>견습 마법사</td><td><span class="badge badge-gray">일반</span></td><td>마법사</td><td>🔥 불꽃</td></tr>
+            <tr><td>3</td><td>철갑 전사</td><td><span class="badge badge-gray">일반</span></td><td>전사</td><td>없음</td></tr>
+            <tr><td>4</td><td>얼음 사수</td><td><span class="badge badge-blue">희귀</span></td><td>궁수</td><td>❄️ 얼음</td></tr>
+            <tr><td>5</td><td>번개 마도사</td><td><span class="badge badge-blue">희귀</span></td><td>마법사</td><td>⚡ 번개</td></tr>
+            <tr><td>6</td><td>어둠 암살자</td><td><span class="badge badge-blue">희귀</span></td><td>암살자</td><td>🌑 어둠</td></tr>
+            <tr><td>7</td><td>성스러운 힐러</td><td><span class="badge badge-blue">희귀</span></td><td>힐러</td><td>✨ 빛</td></tr>
+            <tr><td>8</td><td>화염 대포</td><td><span class="badge badge-purple">영웅</span></td><td>대포</td><td>🔥 불꽃</td></tr>
+            <tr><td>9</td><td>서리 여왕</td><td><span class="badge badge-purple">영웅</span></td><td>마법사</td><td>❄️ 얼음</td></tr>
+            <tr><td>10</td><td>번개 군주</td><td><span class="badge badge-gold">전설</span></td><td>전사</td><td>⚡ 번개</td></tr>
+            <tr><td>11~32</td><td colspan="4"><em style="color: var(--text-muted);">이하 22종 추가 예정</em></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 부록 B -->
+    <div class="section-card">
+      <h3>부록 B. 밸런스 지침</h3>
+      <div class="callout purple">
+        <div class="callout-icon">📝</div>
+        <div class="callout-body">
+          <div class="callout-title">밸런스 팀 전달 메모</div>
+          <div class="callout-text">
+            <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 6px;">
+              <li>• <strong style="color: var(--text);">신화 유닛 1개</strong> = 전설 유닛 2개 + 영웅 유닛 1개 수준의 딜 기여 목표</li>
+              <li>• 웨이브 50 클리어율 목표: 지옥 난이도 기준 <strong style="color: var(--text);">상위 30% 플레이어</strong></li>
+              <li>• 골드 인플레이션 방지: 웨이브 후반부 소환 비용 자동 증가 (웨이브 31+ 모든 소환 +2골드)</li>
+              <li>• 첫 주 클리어율 모니터링 후 <strong style="color: var(--text);">2주 내 핫픽스</strong> 대응 플랜 수립 필수</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+</div><!-- /#main -->
+
+<script>
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+
+// Active link tracking via IntersectionObserver
+const chapters = document.querySelectorAll('.chapter');
+const navLinks = document.querySelectorAll('#sidebar .nav-section a');
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navLinks.forEach(l => l.classList.remove('active'));
+      const active = document.querySelector(`#sidebar a[href="#${entry.target.id}"]`);
+      if (active) active.classList.add('active');
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px', threshold: 0 });
+
+chapters.forEach(c => observer.observe(c));
+</script>
+</body>
+</html>
