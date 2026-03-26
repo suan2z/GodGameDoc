@@ -411,17 +411,19 @@ pre code { background: none; padding: 0; }
   <div class="nav-section">
     <a href="#game-overview">📋 게임 개요</a>
     <a href="#concept">💡 핵심 컨셉 및 방향성</a>
-    <a href="#game-system">⚙️ 게임 시스템</a>
+    <a href="#game-system">⚙️ 게임플레이 메카닉</a>
     <a href="#main-stage">🛡️ 메인 스테이지 룰</a>
     <a href="#unit-system">⚔️ 유닛 시스템</a>
     <a href="#enemy-system">👾 적 시스템</a>
     <a href="#map">🗺️ 맵 &amp; 레이아웃</a>
     <a href="#matching">🔗 매칭 시스템</a>
     <a href="#growth">📈 성장 &amp; 메타 시스템</a>
-    <a href="#monetization">💰 수익 모델</a>
     <a href="#uiux">🖥️ UI/UX 설계</a>
-    <a href="#tech">🔧 기술 스펙 요구사항</a>
-    <a href="#roadmap">🚀 출시 로드맵</a>
+    <a href="#client-tech">💻 클라이언트 기술 사양</a>
+    <a href="#server-tech">🔧 서버 기술 사양</a>
+    <a href="#monetization">💰 수익화 모델</a>
+    <a href="#roadmap">🚀 개발 일정 &amp; 마일스톤</a>
+    <a href="#appendix">📎 부록</a>
   </div>
 </nav>
 
@@ -477,6 +479,14 @@ pre code { background: none; padding: 0; }
         이기면 운빨, 지면 팀운 — 그래도 계속하게 되는 게임."
       </div>
     </div>
+
+    <div class="section-card">
+      <h3>게임 목표</h3>
+      <ul>
+        <li><strong>단기 (MVP)</strong>: 핵심 디펜스 루프 + 2인 코옵 매칭 완성</li>
+        <li><strong>장기</strong>: 글로벌 캐주얼 모바일 시장 공략, 시즌제 운영</li>
+      </ul>
+    </div>
   </section>
 
   <!-- ══════════════════════════════════ -->
@@ -521,9 +531,10 @@ pre code { background: none; padding: 0; }
           <thead><tr><th>게임</th><th>참고 요소</th></tr></thead>
           <tbody>
             <tr><td>오토체스 / TFT</td><td>랜덤 유닛 시스템, 시너지 구조</td></tr>
-            <tr><td>클래시 로얄</td><td>모바일 PvP 배치 감각</td></tr>
+            <tr><td>클래시 로얄</td><td>모바일 PvP 배치 감각, 카드 시스템, 엘릭서 메커닉</td></tr>
             <tr><td>랜덤 디펜스 (Warcraft)</td><td>핵심 장르 원형</td></tr>
             <tr><td>Brawl Stars</td><td>캐주얼 코옵 매칭 UX</td></tr>
+            <tr><td>클래시 오브 클랜</td><td>타워 배치, 유닛 종류, 아트 스타일 방향</td></tr>
           </tbody>
         </table>
       </div>
@@ -536,7 +547,7 @@ pre code { background: none; padding: 0; }
   <section class="chapter" id="game-system">
     <div class="chapter-header">
       <div class="chapter-num ch-yellow">⚙️</div>
-      <h2>게임 시스템</h2>
+      <h2>게임플레이 메카닉</h2>
     </div>
 
     <div class="section-card">
@@ -815,6 +826,10 @@ pre code { background: none; padding: 0; }
 +--------------------+
        ↓
 [라이프 포인트 기지]</code></pre>
+      <ul style="margin-top:12px">
+        <li>뷰 방식: <strong>클래시 로얄 스타일 세로형 탑뷰</strong> — 확정</li>
+        <li>적들은 <strong>3개의 길</strong>에서 동시에 몰려오는 구조 (상단 기준 3개 다리)</li>
+      </ul>
     </div>
 
     <div class="section-card">
@@ -1141,16 +1156,16 @@ pre code { background: none; padding: 0; }
   </section>
 
   <!-- ══════════════════════════════════ -->
-  <!-- 12. 기술 스펙 -->
+  <!-- 11. 클라이언트 기술 사양 -->
   <!-- ══════════════════════════════════ -->
-  <section class="chapter" id="tech">
+  <section class="chapter" id="client-tech">
     <div class="chapter-header">
-      <div class="chapter-num ch-red">🔧</div>
-      <h2>기술 스펙 요구사항</h2>
+      <div class="chapter-num ch-blue">💻</div>
+      <h2>클라이언트 기술 사양</h2>
     </div>
 
     <div class="section-card">
-      <h3>클라이언트</h3>
+      <h3>엔진 및 개발 환경</h3>
       <div class="table-wrap">
         <table>
           <thead><tr><th>항목</th><th>내용</th></tr></thead>
@@ -1168,7 +1183,36 @@ pre code { background: none; padding: 0; }
     </div>
 
     <div class="section-card">
-      <h3>서버</h3>
+      <h3>클라이언트-서버 통신</h3>
+      <ul>
+        <li>프로토콜: WebSocket 기반 실시간 통신</li>
+        <li>전투는 <strong>클라이언트 시뮬레이션</strong> → 서버는 결과만 검증</li>
+        <li>배치 정보는 드래프트 종료 시 <strong>양쪽 동시 전송</strong></li>
+        <li>패킷 위변조 방지: 서버 사이드 밸리데이션 필수</li>
+        <li>탈주/연결 끊김: 30초 내 재연결 허용, 초과 시 AI 대체</li>
+      </ul>
+    </div>
+
+    <div class="section-card">
+      <h3>로컬 데이터 관리</h3>
+      <ul>
+        <li>유저 설정, 게임 팁 등 경량 데이터는 로컬 저장</li>
+        <li>결제 및 게임 데이터는 서버 우선 (서버 권위 방식)</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════ -->
+  <!-- 12. 서버 기술 사양 -->
+  <!-- ══════════════════════════════════ -->
+  <section class="chapter" id="server-tech">
+    <div class="chapter-header">
+      <div class="chapter-num ch-red">🔧</div>
+      <h2>서버 기술 사양</h2>
+    </div>
+
+    <div class="section-card">
+      <h3>서버 구성</h3>
       <div class="table-wrap">
         <table>
           <thead><tr><th>항목</th><th>내용</th></tr></thead>
@@ -1184,21 +1228,31 @@ pre code { background: none; padding: 0; }
     </div>
 
     <div class="section-card">
-      <h3>네트워크 처리 주의사항</h3>
+      <h3>주요 API 목록</h3>
       <ul>
-        <li>전투는 <strong>클라이언트 시뮬레이션</strong> → 서버는 결과만 검증</li>
-        <li>배치 정보는 드래프트 종료 시 <strong>양쪽 동시 전송</strong></li>
-        <li>패킷 위변조 방지: 서버 사이드 밸리데이션 필수</li>
-        <li>탈주/연결 끊김: 30초 내 재연결 허용, 초과 시 AI 대체</li>
+        <li><strong>인증</strong>: 로그인, 회원가입, 소셜 로그인</li>
+        <li><strong>매칭</strong>: 난이도별 매칭 요청 / 취소 / 성공 콜백</li>
+        <li><strong>게임 진행</strong>: 웨이브 시작, 배치 정보 전송, 결과 저장</li>
+        <li><strong>재화</strong>: 소환 결과 (서버 사이드 랜덤), 골드 획득/소비 검증</li>
+        <li><strong>성장</strong>: 경험치/레벨 처리, 업적 달성, 컬렉션 업데이트</li>
+        <li><strong>결제</strong>: 영수증 서버 검증 (Google Play / App Store)</li>
       </ul>
     </div>
 
     <div class="section-card">
-      <h3>보안</h3>
+      <h3>보안 및 Anti-Cheat</h3>
       <ul>
         <li>소환 결과: <strong>서버 사이드 랜덤</strong> (클라이언트 조작 불가)</li>
         <li>골드 획득/소비: 서버 검증 필수</li>
         <li>결제 검증: 영수증 서버 검증 (Google Play / App Store)</li>
+      </ul>
+    </div>
+
+    <div class="section-card">
+      <h3>스케일링 전략</h3>
+      <ul>
+        <li>예상 동접: TBD (소프트 런치 지표 기반 산정)</li>
+        <li>Auto Scaling 기반 인프라 구성 (클라우드)</li>
       </ul>
     </div>
   </section>
@@ -1263,6 +1317,31 @@ pre code { background: none; padding: 0; }
       </div>
     </div>
 
+    <div class="section-card">
+      <h3>14.3 작업 분배</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>역할</th><th>담당 업무</th></tr></thead>
+          <tbody>
+            <tr><td><strong>기획자</strong></td><td>콘텐츠 설계, 밸런스 시트, QA 조율, 문서 관리</td></tr>
+            <tr><td><strong>클라이언트 개발자</strong></td><td>Unity 작업, UI 구현, 클라-서버 연동, 최적화</td></tr>
+            <tr><td><strong>서버 개발자</strong></td><td>API 개발, DB 설계, 매칭 서버, 인프라 운영</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ══════════════════════════════════ -->
+  <!-- 15. 부록 -->
+  <!-- ══════════════════════════════════ -->
+  <section class="chapter" id="appendix">
+    <div class="chapter-header">
+      <div class="chapter-num ch-purple">📎</div>
+      <h2>부록</h2>
+    </div>
+
     <!-- 부록 A -->
     <div class="section-card">
       <h3>부록 A. 유닛 초기 풀 (32종)</h3>
@@ -1305,6 +1384,31 @@ pre code { background: none; padding: 0; }
       </div>
     </div>
 
+    <!-- 부록 C -->
+    <div class="section-card">
+      <h3>부록 C. 미결 사항 (논의 필요)</h3>
+      <div class="callout warn">
+        <div class="callout-icon">⚠️</div>
+        <div class="callout-body">
+          <div class="callout-title">검토 필요 항목</div>
+          <div class="callout-text">
+            <div class="table-wrap" style="margin-top:8px">
+              <table>
+                <thead><tr><th>항목</th><th>현황</th><th>비고</th></tr></thead>
+                <tbody>
+                  <tr><td>플랫폼 최종 확정</td><td>iOS/Android 유력</td><td>논의 필요</td></tr>
+                  <tr><td>카드 시스템 세부 (덱 구성 수)</td><td>미정</td><td>game_overview.md 참조</td></tr>
+                  <tr><td>코옵 역할 분담 메커닉</td><td>검토 중</td><td>공격형/수비형 역할 분리 가능성</td></tr>
+                  <tr><td>자원 공유 메커닉</td><td>검토 중</td><td>팀원 간 카드/골드 공유 여부</td></tr>
+                  <tr><td>서버 인프라 선택</td><td>미정</td><td>클라우드 벤더 선정 필요</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </section>
 
 </div><!-- /#main -->
@@ -1337,3 +1441,4 @@ chapters.forEach(c => observer.observe(c));
 </script>
 </body>
 </html>
+
