@@ -1,3 +1,7 @@
+---
+layout: default
+---
+
 # 갓겜 (GodGame) — Game Design Document
 
 > **버전**: 1.0  
