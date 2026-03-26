@@ -398,6 +398,51 @@ pre code { background: none; padding: 0; }
   .page-header h1 { font-size: 28px; }
   .revenue-grid { grid-template-columns: 1fr; }
 }
+/* ─── HUD WIREFRAME ─── */
+.hud-wireframe {
+  border: 1px solid rgba(45, 212, 191, 0.4);
+  border-radius: 20px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-mono), monospace;
+  margin: 16px auto 0;
+  max-width: 360px;
+  aspect-ratio: 9 / 16;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+.hud-row {
+  display: flex;
+  border-bottom: 1px solid rgba(45, 212, 191, 0.3);
+}
+.hud-row:last-child { border-bottom: none; }
+.hud-cell {
+  flex: 1;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid rgba(45, 212, 191, 0.3);
+  color: var(--text);
+  font-size: 13px;
+  text-align: center;
+}
+.hud-cell:last-child { border-right: none; }
+.hud-map-area {
+  height: 140px;
+  flex-direction: column;
+  color: var(--accent);
+  font-weight: 700;
+  background: rgba(45, 212, 191, 0.03);
+  border-right: none !important;
+}
+.hud-map-area span {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--text-muted);
+  margin-top: 6px;
+}
 </style>
 </head>
 <body>
@@ -477,6 +522,14 @@ pre code { background: none; padding: 0; }
       <div class="pitch-box">
         "운빨로 뽑은 유닛으로 낯선 유저와 함께 몰려오는 적을 막는 2인 코옵 디펜스.<br>
         이기면 운빨, 지면 팀운 — 그래도 계속하게 되는 게임."
+      </div>
+    </div>
+
+    <div class="section-card">
+      <h3>레퍼런스 이미지</h3>
+      <div style="text-align: center; margin-top: 10px;">
+        <img src="clash_royale_battle.png" alt="클래시 로얄 배틀 화면 예시" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+        <p style="font-size: 13px; color: var(--text-muted); margin-top: 10px;">[ 클래시 로얄 배틀 화면 ] — 세로 텍스트 뷰 및 코옵 공간 분할 참고</p>
       </div>
     </div>
 
@@ -1076,22 +1129,41 @@ pre code { background: none; padding: 0; }
 
     <div class="section-card">
       <h3>인게임 HUD 레이아웃</h3>
-      <pre><code>┌─────────────────────────────────────────┐
-│  [웨이브: 12/50]   [LP: ♥♥♥♥♥ 15/20]   │
-│  [상대방 정보: 닉네임 / 배치현황]         │
-├─────────────────────────────────────────┤
-│                                         │
-│        [게임 맵 (80% 화면)]              │
-│                                         │
-├─────────────────────────────────────────┤
-│  [골드: 24]  [유닛 목록: 배치된 유닛]    │
-│  [소환 버튼]  [스킬 버튼]  [판매 버튼]   │
-└─────────────────────────────────────────┘</code></pre>
+      <div class="hud-wireframe">
+        <div class="hud-row">
+          <div class="hud-cell">웨이브: 12 / 50</div>
+          <div class="hud-cell">❤️ LP: 15 / 20</div>
+        </div>
+        <div class="hud-row">
+          <div class="hud-cell">상대방: 닉네임 · 배치현황 실시간 표시</div>
+        </div>
+        <div class="hud-row" style="flex: 1;">
+          <div class="hud-cell hud-map-area" style="height: auto;">
+            [ 게임 맵 영역 ]
+            <span>80% 화면 비율 / 탑뷰</span>
+          </div>
+        </div>
+        <div class="hud-row">
+          <div class="hud-cell" style="flex: 0.4;">💰 골드: 24</div>
+          <div class="hud-cell" style="flex: 0.6;">배치된 유닛 목록</div>
+        </div>
+        <div class="hud-row">
+          <div class="hud-cell">[소환 ▼]</div>
+          <div class="hud-cell">[스킬]</div>
+          <div class="hud-cell" style="flex: 1.5; color: var(--accent);">[ 유닛 슬롯 (4칸) ]</div>
+          <div class="hud-cell">[판매 ×]</div>
+        </div>
+      </div>
     </div>
 
     <div class="section-card">
       <h3>UX 핵심 원칙</h3>
       <div class="card-grid">
+        <div class="feature-card">
+          <div class="icon">📱</div>
+          <div class="fc-title">세로 최적화</div>
+          <div class="fc-desc">9:16 비율에 맞춘 한 손 플레이. 핵심 버튼 화면 하단(Thumb Zone) 배치</div>
+        </div>
         <div class="feature-card">
           <div class="icon">👆</div>
           <div class="fc-title">단순 조작</div>
