@@ -1,1 +1,2 @@
 remote_theme: pages-themes/cayman
+include: ["GDD.md", "game_overview.md"]
