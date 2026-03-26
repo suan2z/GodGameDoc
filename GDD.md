@@ -1,6 +1,3 @@
----
-layout: default
----
 
 # 갓겜 (GodGame) — Game Design Document
 
@@ -43,6 +40,8 @@ layout: default
 | **타겟 유저** | 15~35세, 가볍게 즐기는 캐주얼 게이머 |
 | **등급** | 전체 이용가 (심의 예정) |
 | **핵심 키워드** | 랜덤, 코옵, 운빨, 디펜스, 짧은 세션 |
+
+![레퍼런스 - 클래시 로얄 전투 화면](clash_royale_battle.png)
 
 ### 1.2 엘리베이터 피치
 
